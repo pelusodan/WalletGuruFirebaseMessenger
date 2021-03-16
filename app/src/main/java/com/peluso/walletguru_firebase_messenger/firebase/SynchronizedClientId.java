@@ -30,13 +30,20 @@ public class SynchronizedClientId {
     private final DatabaseReference mDatabase;
     private String username;
     private Context context;
+    private Function<String, Void> clientIdFunc;
 
-    public SynchronizedClientId(Context context, String username) {
+    /**
+     * Constructor for creating this helper class
+     *
+     * @param context      for displaying messages and updated information
+     * @param username     you need a username to access the database and send messages
+     * @param clientIdFunc pass in a function which will use your clientId to begin the firebase messaging system
+     */
+    public SynchronizedClientId(Context context, String username, Function<String, Void> clientIdFunc) {
         this.context = context;
         this.username = username;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        //We need to react to changes in this constructor
+        this.clientIdFunc = clientIdFunc;
         mDatabase.child("users").addChildEventListener(
                 new ChildEventListener() {
                     @Override
@@ -46,22 +53,18 @@ public class SynchronizedClientId {
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                     }
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
                     }
 
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 }
         );
@@ -73,6 +76,7 @@ public class SynchronizedClientId {
             public void onSuccess(String s) {
                 Log.e("Token", s);
                 submitTokenToDatabase(s);
+                clientIdFunc.apply(s);
             }
         });
     }
@@ -90,22 +94,23 @@ public class SynchronizedClientId {
      * @param username to check if this user exists
      * @param func     we need to pass a function which will be called so we can get our boolean asynchronusly
      */
-    public void doesUserExist(String username, Function<Boolean, Void> func) {
+    public void doesUserExist(String username, Function<ChatUser, Void> func) {
         mDatabase.child("users").child(username).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        // if the username exists then we can send a message to them
+                        // if the username exists then we return their client ID to them
                         if (snapshot.exists()) {
-                            func.apply(true);
+                            ChatUser user = snapshot.getValue(ChatUser.class);
+                            func.apply(user);
                         } else {
-                            func.apply(false);
+                            func.apply(null);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        func.apply(false);
+                        func.apply(null);
                     }
                 }
         );
