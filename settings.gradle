@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "WalletGuru_Firebase_Messenger"

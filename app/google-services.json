@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "705221320948",
+    "project_id": "walletgurumessenger",
+    "storage_bucket": "walletgurumessenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705221320948:android:7a0f6c6aa1fe86b529bea1",
+        "android_client_info": {
+          "package_name": "com.peluso.walletguru_firebase_messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705221320948-03r04ct9deu06gvgerh8dv960n3tj3b0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUclG5oN-cuRwZ_gUBHLZeWlAfQwFmKFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705221320948-03r04ct9deu06gvgerh8dv960n3tj3b0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
