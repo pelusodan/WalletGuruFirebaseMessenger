@@ -3,15 +3,19 @@ package com.peluso.walletguru_firebase_messenger.firebase;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
 import com.peluso.walletguru_firebase_messenger.model.ChatUser;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
+import java.util.function.Function;
 
 public class FirebaseMessengerInstance {
 
@@ -25,22 +29,41 @@ public class FirebaseMessengerInstance {
     }
 
 
+    /**
+     * Setting the recipient of the messages - REQUIRED before
+     *
+     * @param chatUser the user you'd like to send a message to
+     */
     public void setRecipient(ChatUser chatUser) {
         recipient = chatUser;
     }
 
-    public void sendMessage(String message) {
+    /**
+     * Send a message to the recipient as defined 'setRecipent()' function
+     *
+     * @param message            the text to send to the recipient
+     * @param incrementSentCount a higher-order function to notify the activity if the message was successful
+     */
+    public void sendMessage(String message, Function<Boolean, Void> incrementSentCount) {
         if (recipient != null) {
             try {
-                // TODO: attempt to send the message to the recipient field
-                new Thread(() -> sendMessageToDevice(recipient.clientId, message)).start();
+                new Thread(() -> sendMessageToDevice(recipient.clientId, message, incrementSentCount)).start();
             } catch (Exception e) {
                 Log.e(TAG, e.getStackTrace().toString());
             }
+        } else {
+            Log.e(TAG, "Cannot send a message before declaring a recipient");
         }
     }
 
-    private void sendMessageToDevice(String clientId, String message) {
+    /**
+     * Copied from the Database Demo, with some slight changes
+     *
+     * @param clientId           client to send to
+     * @param message            messsage to send
+     * @param incrementSentCount higher-order function to let calling Activity know the sending was successful/failed
+     */
+    private void sendMessageToDevice(String clientId, String message, Function<Boolean, Void> incrementSentCount) {
         JSONObject jPayload = new JSONObject();
         JSONObject jNotification = new JSONObject();
         JSONObject jdata = new JSONObject();
@@ -53,21 +76,11 @@ public class FirebaseMessengerInstance {
             jdata.put("title", "data title");
             jdata.put("content", "data content");
 
-            /***
-             * The Notification object is now populated.
-             * Next, build the Payload that we send to the server.
-             */
-
-            // If sending to a single client
             jPayload.put("to", clientId);
             jPayload.put("priority", "high");
             jPayload.put("notification", jNotification);
             jPayload.put("data", jdata);
 
-            /***
-             * The Payload object is now populated.
-             * Send it to Firebase to send the message to the appropriate recipient.
-             */
             URL url = new URL("https://fcm.googleapis.com/fcm/send");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -83,14 +96,16 @@ public class FirebaseMessengerInstance {
             // Read FCM response.
             InputStream inputStream = conn.getInputStream();
             final String resp = convertStreamToString(inputStream);
-
+            // Notify the caller that they should increment the 'sent' count
+            incrementSentCount.apply(true);
             Handler h = new Handler(Looper.getMainLooper());
             h.post(() -> {
                 Log.e(TAG, "run: " + resp);
-                //Toast.makeText(FCMActivity.this, resp, Toast.LENGTH_LONG).show();
             });
         } catch (JSONException | IOException e) {
             e.printStackTrace();
+            // Notify the caller that we should not increment the 'sent' count
+            incrementSentCount.apply(false);
         }
     }
 

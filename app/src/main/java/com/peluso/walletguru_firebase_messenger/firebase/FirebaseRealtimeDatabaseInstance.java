@@ -5,8 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,9 +22,9 @@ import java.util.function.Function;
  *
  * This is so we can chat with other users based on their username
  */
-public class SynchronizedClientId {
+public class FirebaseRealtimeDatabaseInstance {
 
-    private final static String TAG = SynchronizedClientId.class.getSimpleName();
+    private final static String TAG = FirebaseRealtimeDatabaseInstance.class.getSimpleName();
     private final DatabaseReference mDatabase;
     private String username;
     private Context context;
@@ -39,7 +37,7 @@ public class SynchronizedClientId {
      * @param username     you need a username to access the database and send messages
      * @param clientIdFunc pass in a function which will use your clientId to begin the firebase messaging system
      */
-    public SynchronizedClientId(Context context, String username, Function<String, Void> clientIdFunc) {
+    public FirebaseRealtimeDatabaseInstance(Context context, String username, Function<String, Void> clientIdFunc) {
         this.context = context;
         this.username = username;
         this.mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -71,19 +69,32 @@ public class SynchronizedClientId {
     }
 
     public void getToken() {
-        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                Log.e("Token", s);
-                submitTokenToDatabase(s);
-                clientIdFunc.apply(s);
-            }
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(s -> {
+            Log.e("Token", s);
+            // some additional logic for checking if the user exists
+            doesUserExist(username, chatUser -> {
+                        if (chatUser != null) {
+                            // this means the user already is in the database, we should not rewrite it
+                        } else {
+                            // this means the user is not in the database, so we need to add it
+                            submitNewTokenToDatabase(s);
+                        }
+                        return null;
+                    }
+            );
+            // tells the calling activity the client ID we're using
+            clientIdFunc.apply(s);
         });
     }
 
-    private void submitTokenToDatabase(String token) {
+    /**
+     * adding a new client id / username to the database
+     *
+     * @param token the client token gathered from getToken()
+     */
+    private void submitNewTokenToDatabase(String token) {
         // add the user to the db from calculated token
-        ChatUser user = new ChatUser(username, token);
+        ChatUser user = new ChatUser(username, token, 0, "");
         mDatabase.child("users").child(user.username).setValue(user);
     }
 
@@ -115,5 +126,55 @@ public class SynchronizedClientId {
                 }
         );
     }
+
+    /**
+     * adds an emoji to a user's history
+     *
+     * @param emoji the emoji to add to the user's database
+     */
+    public void addEmojiReceived(String emoji) {
+        mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ChatUser currUser = snapshot.getValue(ChatUser.class);
+                if (currUser != null) {
+                    // update the user so they have a new emoji
+                    mDatabase.child("users").child(username).setValue(currUser.addSticker(emoji));
+                } else {
+                    Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error adding emoji" + error.getDetails());
+            }
+        });
+    }
+
+    /**
+     * Increment the logged-in user's sent Emoji count
+     * Note that this should be called every time we send a message
+     */
+    public void incrementEmojiSentCount() {
+        mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ChatUser currUser = snapshot.getValue(ChatUser.class);
+                if (currUser != null) {
+                    // update the user so they have an increased sticker sent count
+                    mDatabase.child("users").child(username).setValue(currUser.incrementStickerSentCount());
+                } else {
+                    Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "Error incrementing emoji sent count" + error.getDetails());
+            }
+        });
+    }
+
 
 }

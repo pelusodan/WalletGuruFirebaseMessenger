@@ -7,10 +7,15 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.peluso.walletguru_firebase_messenger.R;
 import com.peluso.walletguru_firebase_messenger.firebase.FirebaseMessengerInstance;
-import com.peluso.walletguru_firebase_messenger.firebase.SynchronizedClientId;
+import com.peluso.walletguru_firebase_messenger.firebase.FirebaseRealtimeDatabaseInstance;
 import com.peluso.walletguru_firebase_messenger.model.ChatUser;
+
+import java.util.function.Function;
+
+import static com.peluso.walletguru_firebase_messenger.view.LoginActivityKt.UNAME_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,20 +24,24 @@ public class MainActivity extends AppCompatActivity {
     private EditText message_input;
     private Button send_button;
     private final static String TAG = MainActivity.class.getSimpleName();
-    private SynchronizedClientId synchronizedClientId;
+    private FirebaseRealtimeDatabaseInstance firebase;
     private FirebaseMessengerInstance firebaseMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // here we grab the declared username from the intent and put the intent in our database
+        String username = getIntent().getStringExtra(UNAME_KEY);
+
         // Test code to make a username in the Firebase database
-        synchronizedClientId = new SynchronizedClientId(this, "username500", s -> {
+        firebase = new FirebaseRealtimeDatabaseInstance(this, username, s -> {
             createFirebaseMessagingInstance(s);
             return null;
         });
         // this call should update the database with the correct username and client id
-        synchronizedClientId.getToken();
+        firebase.getToken();
         initViews();
     }
 
@@ -44,10 +53,15 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         username_input = findViewById(R.id.username_input);
         username_check_button = findViewById(R.id.submit_check_button);
-        username_check_button.setOnClickListener(v -> synchronizedClientId.doesUserExist(username_input.getText().toString(), chatUser -> {
-            // TODO: ideally once you verify a user exists you can open a new activity
-            // and begin a chat with them. For now just showing in toast
-            // NOTE: this also sets the recipient in our firebase messaging instance
+        username_check_button.setOnClickListener(v -> firebase.doesUserExist(username_input.getText().toString(), chatUser -> {
+            /***
+             *  Currently, this function is set up so when you check it sets the recepient
+             *  as the user you'd like to send to. We should probably change the UI so
+             *  we tell the user they need to first confirm before sending a message
+             *
+             *  or we could make this so that when you click 'send message' it automatically
+             *  verifies the other user and skips this step
+             */
             if (chatUser != null) {
                 // user exists
                 Log.e(TAG, "User exists");
@@ -63,7 +77,16 @@ public class MainActivity extends AppCompatActivity {
         message_input = findViewById(R.id.message_edit_text);
         send_button = findViewById(R.id.send_message_button);
         send_button.setOnClickListener(v -> {
-            firebaseMessenger.sendMessage(message_input.getText().toString());
+            // for testing lets see if we can add an emoji
+            //firebase.addEmojiReceived("p");
+            //firebase.incrementEmojiSentCount();
+            firebaseMessenger.sendMessage(message_input.getText().toString(), aBoolean -> {
+                // we check if the handler was able to send the message successfully, and increment if so
+                if (aBoolean) {
+                    firebase.incrementEmojiSentCount();
+                }
+                return null;
+            });
         });
     }
 

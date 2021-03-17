@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">WalletGuru_Firebase_Messenger</string>
-    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
 </resources>

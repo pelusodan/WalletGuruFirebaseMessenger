@@ -8,15 +8,16 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.peluso.walletguru_firebase_messenger.R;
 import com.peluso.walletguru_firebase_messenger.view.MainActivity;
 
+/**
+ * For the most part, this is copied from the Database Demo assingment - we can add more customizations to this late
+ */
 public class MessagingService extends FirebaseMessagingService {
 
     private static final String CHANNEL_ID = "CHANNEL_ID";
@@ -58,7 +59,7 @@ public class MessagingService extends FirebaseMessagingService {
 
         notification = builder.setContentTitle(remoteMessage.getNotification().getTitle())
                 .setContentText(remoteMessage.getNotification().getBody())
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
@@ -67,7 +68,6 @@ public class MessagingService extends FirebaseMessagingService {
 
     public void postToastMessage(final String message) {
         Handler handler = new Handler(Looper.getMainLooper());
-
         handler.post(() -> Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show());
     }
 
