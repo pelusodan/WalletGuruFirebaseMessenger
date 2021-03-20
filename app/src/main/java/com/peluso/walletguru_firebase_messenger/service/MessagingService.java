@@ -35,6 +35,8 @@ public class MessagingService extends FirebaseMessagingService {
 
         if (remoteMessage.getNotification() != null) {
             showNotification(remoteMessage);
+
+
         }
         extractPayloadDataForegroundCase(remoteMessage);
 

@@ -48,6 +48,7 @@ public class FirebaseMessengerInstance {
         if (recipient != null) {
             try {
                 new Thread(() -> sendMessageToDevice(recipient.clientId, message, incrementSentCount)).start();
+
             } catch (Exception e) {
                 Log.e(TAG, e.getStackTrace().toString());
             }
@@ -96,8 +97,12 @@ public class FirebaseMessengerInstance {
             // Read FCM response.
             InputStream inputStream = conn.getInputStream();
             final String resp = convertStreamToString(inputStream);
+
             // Notify the caller that they should increment the 'sent' count
             incrementSentCount.apply(true);
+
+
+
             Handler h = new Handler(Looper.getMainLooper());
             h.post(() -> {
                 Log.e(TAG, "run: " + resp);

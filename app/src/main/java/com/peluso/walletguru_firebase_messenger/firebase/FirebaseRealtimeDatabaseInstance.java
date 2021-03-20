@@ -132,14 +132,14 @@ public class FirebaseRealtimeDatabaseInstance {
      *
      * @param emoji the emoji to add to the user's database
      */
-    public void addEmojiReceived(String emoji) {
-        mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void addEmojiReceived(String receivedUsername, String emoji) {
+        mDatabase.child("users").child(receivedUsername).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatUser currUser = snapshot.getValue(ChatUser.class);
                 if (currUser != null) {
                     // update the user so they have a new emoji
-                    mDatabase.child("users").child(username).setValue(currUser.addSticker(emoji));
+                    mDatabase.child("users").child(receivedUsername).setValue(currUser.addSticker(emoji));
                 } else {
                     Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
                 }

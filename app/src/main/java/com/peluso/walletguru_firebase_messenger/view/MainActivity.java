@@ -82,8 +82,15 @@ public class MainActivity extends AppCompatActivity {
             //firebase.incrementEmojiSentCount();
             firebaseMessenger.sendMessage(message_input.getText().toString(), aBoolean -> {
                 // we check if the handler was able to send the message successfully, and increment if so
+                // update received user's "received" history
                 if (aBoolean) {
+                    firebase.addEmojiReceived(username_input.getText().toString(), "\uD83D\uDE01");
                     firebase.incrementEmojiSentCount();
+
+
+
+
+
                 }
                 return null;
             });
