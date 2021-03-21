@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".view.MainActivity">
 
     <TextView
         android:id="@+id/main_textview"
@@ -14,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="90dp"
         android:textColor="@color/red"
         android:textStyle="italic"/>
 
@@ -34,7 +37,7 @@
         android:id="@+id/submit_check_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Check User"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -49,7 +52,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/submit_check_button"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
 
     <ImageButton
         android:id="@+id/heartButton"
@@ -83,15 +88,58 @@
         app:layout_constraintTop_toTopOf="@id/heartButton"
         app:srcCompat="@mipmap/angry_icon_foreground" />
 
-    <Button
-        android:id="@+id/sticker_history"
+    <TextView
+        android:id="@+id/sent_heart_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Received Stickers"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Sent Count: "
+        app:layout_constraintEnd_toStartOf="@id/hugButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heartButton"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="20dp"/>
 
+    <TextView
+        android:id="@+id/sent_hug_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent Count: "
+        app:layout_constraintStart_toEndOf="@id/sent_heart_count"
+        app:layout_constraintEnd_toStartOf="@id/sent_angry_count"
+        app:layout_constraintTop_toTopOf="@id/sent_heart_count" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/sent_angry_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent Count: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sent_hug_count"
+        app:layout_constraintTop_toTopOf="@id/sent_heart_count" />
+
+    <TextView
+        android:id="@+id/received_stickers_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Received Stickers:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sent_hug_count"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/received_stickers"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_height="210dp"
+        android:layout_width="match_parent"
+        android:hint="Stickers List"
+        app:layout_constraintStart_toStartOf="@id/username_input"
+        app:layout_constraintEnd_toEndOf="@id/username_input"
+        app:layout_constraintTop_toBottomOf="@id/received_stickers_info"
+        android:layout_marginTop="10dp"
+        android:scrollbars="vertical"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
