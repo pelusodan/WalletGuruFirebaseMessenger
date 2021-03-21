@@ -101,19 +101,16 @@ public class MainActivity extends AppCompatActivity {
         ImageButton love_button = findViewById(R.id.heartButton);
         love_button.setOnClickListener(v -> {
             clickedEmoji("\u2764\ufe0f");
-            getHistory();
         });
 
         ImageButton hugs_button = findViewById(R.id.hugButton);
         hugs_button.setOnClickListener(v -> {
             clickedEmoji("\ud83e\udd17");
-            getHistory();
         });
 
         ImageButton angry_button = findViewById(R.id.angryButton);
         angry_button.setOnClickListener(v -> {
             clickedEmoji("\ud83d\ude21");
-            getHistory();
         });
     }
 
