@@ -74,8 +74,8 @@ public class FirebaseMessengerInstance {
             jNotification.put("sound", "default");
             jNotification.put("badge", "1");
 
-            jdata.put("title", "data title");
-            jdata.put("content", "data content");
+            jdata.put("title", "Message");
+            jdata.put("content", message);
 
             jPayload.put("to", clientId);
             jPayload.put("priority", "high");

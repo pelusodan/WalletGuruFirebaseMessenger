@@ -74,7 +74,7 @@ public class MessagingService extends FirebaseMessagingService {
     private void extractPayloadDataForegroundCase(RemoteMessage remoteMessage) {
 
         remoteMessage.getData();
-        postToastMessage(remoteMessage.getData().get("title"));
+        postToastMessage("Received Message: " + remoteMessage.getData().get("content"));
 
     }
 }
