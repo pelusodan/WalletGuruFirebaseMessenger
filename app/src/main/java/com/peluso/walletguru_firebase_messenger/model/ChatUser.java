@@ -19,9 +19,11 @@ public class ChatUser {
     }
 
     public ChatUser addSticker(String sticker) {
-        received = received + sticker;
+        received = received + "," + sticker;
         return this;
     }
+
+
 
     public ChatUser incrementStickerSentCount() {
         stickerSentCount++;

@@ -75,6 +75,20 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }));
         message_input = findViewById(R.id.message_edit_text);
+
+        Button love_button = findViewById(R.id.loveEmoji);
+        love_button.setOnClickListener(v -> {
+            clickedEmoji(love_button.getText().toString());
+        });
+
+        Button flex_button = findViewById(R.id.flexEmoji);
+        flex_button.setOnClickListener(v -> {
+            //clickedEmoji(flex_button.getText().toString());
+            clickedEmoji("\uD83E\uDD17");
+
+        });
+
+
         send_button = findViewById(R.id.send_message_button);
         send_button.setOnClickListener(v -> {
             // for testing lets see if we can add an emoji
@@ -84,12 +98,11 @@ public class MainActivity extends AppCompatActivity {
                 // we check if the handler was able to send the message successfully, and increment if so
                 // update received user's "received" history
                 if (aBoolean) {
-                    firebase.addEmojiReceived(username_input.getText().toString(), "\uD83D\uDE01");
+
+
+                    firebase.addEmojiReceived(username_input.getText().toString(), message_input.getText().toString());
+                    Log.e("message EMO ", message_input.getText().toString());
                     firebase.incrementEmojiSentCount();
-
-
-
-
 
                 }
                 return null;
@@ -100,6 +113,20 @@ public class MainActivity extends AppCompatActivity {
     private void setRecipient(ChatUser chatUser) {
         // this function sets our Firebase instance to be sending messages to THIS user
         firebaseMessenger.setRecipient(chatUser);
+    }
+
+    private void clickedEmoji(String emojiClicked) {
+        // "message EMO  \uD83E\uDD2A\uD83D\uDE18\uD83D\uDE0D\uD83D\uDE02\uD83D\uDE01\uD83E\uDD17 "
+
+        firebaseMessenger.sendMessage(emojiClicked, aBoolean -> {
+                // we check if the handler was able to send the message successfully, and increment if so
+                // update received user's "received" history
+                if (aBoolean) {
+                    firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked);
+                    firebase.incrementEmojiSentCount();
+                }
+                return null;
+            });
     }
 
 }

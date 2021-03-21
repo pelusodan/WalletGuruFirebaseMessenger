@@ -42,14 +42,95 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/submit_check_button" />
 
+
     <Button
         android:id="@+id/send_message_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:text="send message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/triumphEmoji" />
+
+    <Button
+        android:id="@+id/grinningEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+
+        android:text="\uD83E\uDD2A"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
+
+    <Button
+        android:id="@+id/satisfiedEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="24dp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="\uD83D\uDE18"
+        app:layout_constraintEnd_toStartOf="@+id/blushEmoji"
+        app:layout_constraintStart_toEndOf="@+id/grinningEmoji"
+        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
+
+    <Button
+        android:id="@+id/triumphEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="\uD83D\uDE0D"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/flexEmoji"
+        app:layout_constraintStart_toEndOf="@+id/loveEmoji"
+        app:layout_constraintTop_toBottomOf="@+id/satisfiedEmoji" />
+
+    <Button
+        android:id="@+id/blushEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="\uD83D\uDE02"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
+
+    <Button
+        android:id="@+id/flexEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="\uD83D\uDE01"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blushEmoji" />
+
+<!--    \uD83E\uDD17-->
+
+    <Button
+        android:id="@+id/loveEmoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="\u2764\ufe0f"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grinningEmoji" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
