@@ -94,7 +94,7 @@ public class FirebaseRealtimeDatabaseInstance {
      */
     private void submitNewTokenToDatabase(String token) {
         // add the user to the db from calculated token
-        ChatUser user = new ChatUser(username, token, 0, "");
+        ChatUser user = new ChatUser(username, token, 0, 0, 0, "");
         mDatabase.child("users").child(user.username).setValue(user);
     }
 
@@ -156,14 +156,14 @@ public class FirebaseRealtimeDatabaseInstance {
      * Increment the logged-in user's sent Emoji count
      * Note that this should be called every time we send a message
      */
-    public void incrementEmojiSentCount() {
+    public void incrementEmojiSentCount(String emojiClicked) {
         mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatUser currUser = snapshot.getValue(ChatUser.class);
                 if (currUser != null) {
                     // update the user so they have an increased sticker sent count
-                    mDatabase.child("users").child(username).setValue(currUser.incrementStickerSentCount());
+                    mDatabase.child("users").child(username).setValue(currUser.incrementStickerSentCount(emojiClicked));
                 } else {
                     Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
                 }
@@ -175,6 +175,4 @@ public class FirebaseRealtimeDatabaseInstance {
             }
         });
     }
-
-
 }

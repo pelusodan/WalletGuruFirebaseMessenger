@@ -101,8 +101,6 @@ public class FirebaseMessengerInstance {
             // Notify the caller that they should increment the 'sent' count
             incrementSentCount.apply(true);
 
-
-
             Handler h = new Handler(Looper.getMainLooper());
             h.post(() -> {
                 Log.e(TAG, "run: " + resp);

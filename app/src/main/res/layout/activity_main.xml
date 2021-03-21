@@ -10,7 +10,7 @@
         android:id="@+id/main_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check if user exists"
+        android:text="You have to Check if user exists before sending Stickers!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="username"
+        android:hint="username; Try walletgurum"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/main_textview" />
 
@@ -29,10 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Check"
+        android:text="Check User"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username_input" />
+    <!--
 
     <EditText
         android:id="@+id/message_edit_text"
@@ -42,95 +43,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/submit_check_button" />
 
+-->
 
-    <Button
-        android:id="@+id/send_message_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="send message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/triumphEmoji" />
-
-    <Button
-        android:id="@+id/grinningEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-
-        android:text="\uD83E\uDD2A"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
-
-    <Button
-        android:id="@+id/satisfiedEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="24dp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-        android:text="\uD83D\uDE18"
-        app:layout_constraintEnd_toStartOf="@+id/blushEmoji"
-        app:layout_constraintStart_toEndOf="@+id/grinningEmoji"
-        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
-
-    <Button
-        android:id="@+id/triumphEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-        android:text="\uD83D\uDE0D"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/flexEmoji"
-        app:layout_constraintStart_toEndOf="@+id/loveEmoji"
-        app:layout_constraintTop_toBottomOf="@+id/satisfiedEmoji" />
-
-    <Button
-        android:id="@+id/blushEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-        android:text="\uD83D\uDE02"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message_edit_text" />
-
-    <Button
-        android:id="@+id/flexEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-        android:text="\uD83D\uDE01"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blushEmoji" />
-
-<!--    \uD83E\uDD17-->
-
-    <Button
-        android:id="@+id/loveEmoji"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
+    <ImageButton
+        android:id="@+id/heartButton"
+        android:layout_width="93dp"
+        android:layout_height="60dp"
         android:text="\u2764\ufe0f"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grinningEmoji" />
+        app:layout_constraintTop_toBottomOf="@+id/submit_check_button"
+        app:srcCompat="@mipmap/heart_icon_foreground" />
+
+    <ImageButton
+        android:id="@+id/hugButton"
+        android:layout_width="78dp"
+        android:layout_height="65dp"
+        android:text="\ud83e\udd17"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heartButton"
+        app:srcCompat="@mipmap/hugs_icon_foreground" />
+
+    <ImageButton
+        android:id="@+id/angryButton"
+        android:layout_width="79dp"
+        android:layout_height="71dp"
+        android:text="\ud83d\ude21"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hugButton"
+        app:srcCompat="@mipmap/angry_icon_foreground" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

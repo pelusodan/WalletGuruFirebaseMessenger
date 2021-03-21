@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.peluso.walletguru_firebase_messenger.R;
@@ -74,22 +75,28 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }));
-        message_input = findViewById(R.id.message_edit_text);
+       // message_input = findViewById(R.id.message_edit_text);
 
-        Button love_button = findViewById(R.id.loveEmoji);
+        ImageButton love_button = findViewById(R.id.heartButton);
         love_button.setOnClickListener(v -> {
-            clickedEmoji(love_button.getText().toString());
+            clickedEmoji("\u2764\ufe0f");
         });
 
-        Button flex_button = findViewById(R.id.flexEmoji);
-        flex_button.setOnClickListener(v -> {
+        ImageButton hugs_button = findViewById(R.id.hugButton);
+        hugs_button.setOnClickListener(v -> {
             //clickedEmoji(flex_button.getText().toString());
-            clickedEmoji("\uD83E\uDD17");
+            clickedEmoji("\ud83e\udd17");
 
         });
 
+        ImageButton angry_button = findViewById(R.id.angryButton);
+        angry_button.setOnClickListener(v -> {
+            //clickedEmoji(flex_button.getText().toString());
+            clickedEmoji("\ud83d\ude21");
 
-        send_button = findViewById(R.id.send_message_button);
+        });
+
+/*        send_button = findViewById(R.id.send_message_button);
         send_button.setOnClickListener(v -> {
             // for testing lets see if we can add an emoji
             //firebase.addEmojiReceived("p");
@@ -107,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return null;
             });
-        });
+        });*/
     }
 
     private void setRecipient(ChatUser chatUser) {
@@ -123,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
                 // update received user's "received" history
                 if (aBoolean) {
                     firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked);
-                    firebase.incrementEmojiSentCount();
+                    Log.e("message EMO ", emojiClicked);
+                    firebase.incrementEmojiSentCount(emojiClicked);
                 }
                 return null;
             });
