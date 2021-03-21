@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.peluso.walletguru_firebase_messenger.model.ChatUser;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
 /***
@@ -29,6 +30,7 @@ public class FirebaseRealtimeDatabaseInstance {
     private String username;
     private Context context;
     private Function<String, Void> clientIdFunc;
+    private int Count = 0;
 
     /**
      * Constructor for creating this helper class

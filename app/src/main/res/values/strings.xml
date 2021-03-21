@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">WalletGuru_Firebase_Messenger</string>
-
+    <string name="app_name">WalletGuru Firebase Messenger</string>
+    <string name="sent_count">Sent Count: %1$d</string>
 </resources>
