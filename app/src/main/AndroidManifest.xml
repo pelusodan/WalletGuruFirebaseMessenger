@@ -17,8 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            ></activity>
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"
