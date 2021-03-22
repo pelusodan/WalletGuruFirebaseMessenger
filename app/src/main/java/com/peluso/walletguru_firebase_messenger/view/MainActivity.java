@@ -3,16 +3,14 @@ package com.peluso.walletguru_firebase_messenger.view;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peluso.walletguru_firebase_messenger.R;
@@ -30,10 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseRealtimeDatabaseInstance firebase;
     private FirebaseMessengerInstance firebaseMessenger;
     private String myUsername;
-    private TextView sentHeartCount;
-    private TextView sentHugCount;
-    private TextView sentAngryCount;
-    private TextView receivedStickers;
+    private Button getHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
         // this call should update the database with the correct username and client id
         firebase.getToken();
 
-        sentHeartCount = findViewById(R.id.sent_heart_count);
-        sentHugCount = findViewById(R.id.sent_hug_count);
-        sentAngryCount = findViewById(R.id.sent_angry_count);
-        receivedStickers = findViewById(R.id.received_stickers);
-        receivedStickers.setMovementMethod(new ScrollingMovementMethod());
-
-        getHistory();
         initViews();
     }
 
@@ -109,19 +97,12 @@ public class MainActivity extends AppCompatActivity {
         angry_button.setOnClickListener(v -> {
             clickedEmoji("\ud83d\ude21");
         });
-    }
 
-    private void getHistory() {
-        firebase.doesUserExist(myUsername, chatUser -> {
-            if (chatUser != null) {
-                this.runOnUiThread(() -> {
-                    sentHeartCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHeart));
-                    sentHugCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHugs));
-                    sentAngryCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountAngry));
-                    receivedStickers.setText(chatUser.received);
-                });
-            }
-            return null;
+        Button getHistory = findViewById(R.id.get_history);
+        getHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            intent.putExtra("UNAME_KEY", myUsername);
+            startActivity(intent);
         });
     }
 
@@ -133,39 +114,15 @@ public class MainActivity extends AppCompatActivity {
     private void clickedEmoji(String emojiClicked) {
         // "message EMO  \uD83E\uDD2A\uD83D\uDE18\uD83D\uDE0D\uD83D\uDE02\uD83D\uDE01\uD83E\uDD17 "
 
-        ClickedEmojiTask task = new ClickedEmojiTask();
-        try {
-            task.execute(emojiClicked);
-        } catch (Exception e) {
-            Log.e(TAG, "Error Executing task.");
-        }
-    }
-
-    private class ClickedEmojiTask extends AsyncTask<String, Integer, String> {
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-
-        }
-
-        @Override
-        protected String doInBackground(String... emojiClicked) {
-            firebaseMessenger.sendMessage(emojiClicked[0], aBoolean -> {
-                // we check if the handler was able to send the message successfully, and increment if so
-                // update received user's "received" history
-                if (aBoolean) {
-                    firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked[0]);
-                    Log.e("message EMO ", emojiClicked[0]);
-                    firebase.incrementEmojiSentCount(emojiClicked[0]);
-                }
-                return null;
-            });
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String test) {
-            getHistory();
-        }
+        firebaseMessenger.sendMessage(emojiClicked, aBoolean -> {
+            // we check if the handler was able to send the message successfully, and increment if so
+            // update received user's "received" history
+            if (aBoolean) {
+                firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked);
+                Log.e("message EMO ", emojiClicked);
+                firebase.incrementEmojiSentCount(emojiClicked);
+            }
+            return null;
+        });
     }
 }
