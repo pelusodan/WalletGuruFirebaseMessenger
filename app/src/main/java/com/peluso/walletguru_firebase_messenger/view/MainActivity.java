@@ -2,8 +2,12 @@ package com.peluso.walletguru_firebase_messenger.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         });
         // this call should update the database with the correct username and client id
         firebase.getToken();
+
+        sentHeartCount = findViewById(R.id.sent_heart_count);
+        sentHugCount = findViewById(R.id.sent_hug_count);
+        sentAngryCount = findViewById(R.id.sent_angry_count);
+        receivedStickers = findViewById(R.id.received_stickers);
+        receivedStickers.setMovementMethod(new ScrollingMovementMethod());
+
         getHistory();
         initViews();
     }
@@ -57,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getHistory() {
-        sentHeartCount = findViewById(R.id.sent_heart_count);
-        sentHugCount = findViewById(R.id.sent_hug_count);
-        sentAngryCount = findViewById(R.id.sent_angry_count);
-        receivedStickers = findViewById(R.id.received_stickers);
-
         firebase.doesUserExist(myUsername, chatUser -> {
             if (chatUser != null) {
                 sentHeartCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHeart));
@@ -95,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "User doesn't exist");
                 Toast.makeText(getApplicationContext(), username_input.getText().toString() + " does not exist!", Toast.LENGTH_LONG).show();
             }
+            View view = this.getCurrentFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
             return null;
         }));
 
