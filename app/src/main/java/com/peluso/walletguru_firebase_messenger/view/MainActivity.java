@@ -2,8 +2,8 @@ package com.peluso.walletguru_firebase_messenger.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -19,8 +19,6 @@ import com.peluso.walletguru_firebase_messenger.R;
 import com.peluso.walletguru_firebase_messenger.firebase.FirebaseMessengerInstance;
 import com.peluso.walletguru_firebase_messenger.firebase.FirebaseRealtimeDatabaseInstance;
 import com.peluso.walletguru_firebase_messenger.model.ChatUser;
-
-import java.util.concurrent.CountDownLatch;
 
 import static com.peluso.walletguru_firebase_messenger.view.LoginActivityKt.UNAME_KEY;
 
@@ -135,18 +133,39 @@ public class MainActivity extends AppCompatActivity {
     private void clickedEmoji(String emojiClicked) {
         // "message EMO  \uD83E\uDD2A\uD83D\uDE18\uD83D\uDE0D\uD83D\uDE02\uD83D\uDE01\uD83E\uDD17 "
 
-        firebaseMessenger.sendMessage(emojiClicked, aBoolean -> {
+        ClickedEmojiTask task = new ClickedEmojiTask();
+        try {
+            task.execute(emojiClicked);
+        } catch (Exception e) {
+            Log.e(TAG, "Error Executing task.");
+        }
+    }
+
+    private class ClickedEmojiTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+
+        }
+
+        @Override
+        protected String doInBackground(String... emojiClicked) {
+            firebaseMessenger.sendMessage(emojiClicked[0], aBoolean -> {
                 // we check if the handler was able to send the message successfully, and increment if so
                 // update received user's "received" history
                 if (aBoolean) {
-                    firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked);
-                    Log.e("message EMO ", emojiClicked);
-                    firebase.incrementEmojiSentCount(emojiClicked);
+                    firebase.addEmojiReceived(username_input.getText().toString(), emojiClicked[0]);
+                    Log.e("message EMO ", emojiClicked[0]);
+                    firebase.incrementEmojiSentCount(emojiClicked[0]);
                 }
                 return null;
             });
+            return "";
+        }
 
-        getHistory();
+        @Override
+        protected void onPostExecute(String test) {
+            getHistory();
+        }
     }
-
 }
