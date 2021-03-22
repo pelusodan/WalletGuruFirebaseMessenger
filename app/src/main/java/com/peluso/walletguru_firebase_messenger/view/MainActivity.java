@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseRealtimeDatabaseInstance firebase;
     private FirebaseMessengerInstance firebaseMessenger;
     private String myUsername;
-    private Button getHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

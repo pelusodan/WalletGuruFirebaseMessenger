@@ -29,7 +29,6 @@ public class HistoryActivity  extends AppCompatActivity {
 
         // here we grab the declared username from the intent and put the intent in our database
         myUsername = getIntent().getExtras().getString("UNAME_KEY");
-        System.out.println("Jurgen test" + myUsername);
 
         // Test code to make a username in the Firebase database
         firebase = new FirebaseRealtimeDatabaseInstance(this, myUsername, s -> {
