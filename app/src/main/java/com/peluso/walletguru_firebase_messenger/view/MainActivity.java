@@ -2,6 +2,7 @@ package com.peluso.walletguru_firebase_messenger.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -67,18 +68,6 @@ public class MainActivity extends AppCompatActivity {
         firebaseMessenger = new FirebaseMessengerInstance(clientId);
     }
 
-    private void getHistory() {
-        firebase.doesUserExist(myUsername, chatUser -> {
-            if (chatUser != null) {
-                sentHeartCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHeart));
-                sentHugCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHugs));
-                sentAngryCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountAngry));
-                receivedStickers.setText(chatUser.received);
-            }
-            return null;
-        });
-    }
-
     private void initViews() {
         username_input = findViewById(R.id.username_input);
         username_check_button = findViewById(R.id.submit_check_button);
@@ -124,6 +113,20 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getHistory() {
+        firebase.doesUserExist(myUsername, chatUser -> {
+            if (chatUser != null) {
+                this.runOnUiThread(() -> {
+                    sentHeartCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHeart));
+                    sentHugCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountHugs));
+                    sentAngryCount.setText(String.format(getResources().getString(R.string.sent_count), chatUser.stickerSentCountAngry));
+                    receivedStickers.setText(chatUser.received);
+                });
+            }
+            return null;
+        });
+    }
+
     private void setRecipient(ChatUser chatUser) {
         // this function sets our Firebase instance to be sending messages to THIS user
         firebaseMessenger.setRecipient(chatUser);
@@ -142,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return null;
             });
+
+        getHistory();
     }
 
 }
