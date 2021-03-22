@@ -1,55 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.MainActivity">
 
     <TextView
         android:id="@+id/main_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Check if user exists"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Check user exists before sending Stickers!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/red"
+        android:textStyle="italic"/>
 
     <EditText
         android:id="@+id/username_input"
-        android:layout_width="match_parent"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
         android:layout_height="wrap_content"
-        android:hint="username"
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:hint="Username of Receiver"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_textview" />
+        app:layout_constraintTop_toTopOf="@+id/main_textview"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/submit_check_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Check"
+        android:layout_marginTop="20dp"
+        android:text="Check User"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username_input" />
 
-    <EditText
-        android:id="@+id/message_edit_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="message to send"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/submit_check_button" />
-
-    <Button
-        android:id="@+id/send_message_button"
+    <TextView
+        android:id="@+id/click_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="send message"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Click Sticker to send:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/message_edit_text" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/submit_check_button"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageButton
+        android:id="@+id/heartButton"
+        android:layout_width="93dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:text="\u2764\ufe0f"
+        app:layout_constraintEnd_toStartOf="@id/hugButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/click_info"
+        app:srcCompat="@mipmap/heart_icon_foreground" />
+
+    <ImageButton
+        android:id="@+id/hugButton"
+        android:layout_width="78dp"
+        android:layout_height="65dp"
+        android:text="\ud83e\udd17"
+        app:layout_constraintEnd_toStartOf="@id/angryButton"
+        app:layout_constraintStart_toEndOf="@id/heartButton"
+        app:layout_constraintTop_toTopOf="@id/heartButton"
+        app:srcCompat="@mipmap/hugs_icon_foreground" />
+
+    <ImageButton
+        android:id="@+id/angryButton"
+        android:layout_width="79dp"
+        android:layout_height="71dp"
+        android:layout_marginBottom="136dp"
+        android:text="\ud83d\ude21"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hugButton"
+        app:layout_constraintTop_toTopOf="@id/heartButton"
+        app:srcCompat="@mipmap/angry_icon_foreground" />
+
+    <TextView
+        android:id="@+id/sent_heart_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent Count: "
+        app:layout_constraintEnd_toStartOf="@id/hugButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/heartButton"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/sent_hug_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent Count: "
+        app:layout_constraintStart_toEndOf="@id/sent_heart_count"
+        app:layout_constraintEnd_toStartOf="@id/sent_angry_count"
+        app:layout_constraintTop_toTopOf="@id/sent_heart_count" />
+
+    <TextView
+        android:id="@+id/sent_angry_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sent Count: "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sent_hug_count"
+        app:layout_constraintTop_toTopOf="@id/sent_heart_count" />
+
+    <TextView
+        android:id="@+id/received_stickers_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Received Stickers:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sent_hug_count"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/received_stickers"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:hint=""
+        app:layout_constraintStart_toStartOf="@id/username_input"
+        app:layout_constraintEnd_toEndOf="@id/username_input"
+        app:layout_constraintTop_toBottomOf="@id/received_stickers_info"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:scrollbars="vertical|none"
+        android:textSize="40sp"
+        android:textColor="@color/black"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

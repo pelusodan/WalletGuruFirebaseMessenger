@@ -14,6 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.peluso.walletguru_firebase_messenger.model.ChatUser;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.function.Function;
 
 /***
@@ -29,6 +30,7 @@ public class FirebaseRealtimeDatabaseInstance {
     private String username;
     private Context context;
     private Function<String, Void> clientIdFunc;
+    private int Count = 0;
 
     /**
      * Constructor for creating this helper class
@@ -94,7 +96,7 @@ public class FirebaseRealtimeDatabaseInstance {
      */
     private void submitNewTokenToDatabase(String token) {
         // add the user to the db from calculated token
-        ChatUser user = new ChatUser(username, token, 0, "");
+        ChatUser user = new ChatUser(username, token, 0, 0, 0, "");
         mDatabase.child("users").child(user.username).setValue(user);
     }
 
@@ -132,14 +134,14 @@ public class FirebaseRealtimeDatabaseInstance {
      *
      * @param emoji the emoji to add to the user's database
      */
-    public void addEmojiReceived(String emoji) {
-        mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void addEmojiReceived(String receivedUsername, String emoji) {
+        mDatabase.child("users").child(receivedUsername).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatUser currUser = snapshot.getValue(ChatUser.class);
                 if (currUser != null) {
                     // update the user so they have a new emoji
-                    mDatabase.child("users").child(username).setValue(currUser.addSticker(emoji));
+                    mDatabase.child("users").child(receivedUsername).setValue(currUser.addSticker(emoji));
                 } else {
                     Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
                 }
@@ -156,14 +158,14 @@ public class FirebaseRealtimeDatabaseInstance {
      * Increment the logged-in user's sent Emoji count
      * Note that this should be called every time we send a message
      */
-    public void incrementEmojiSentCount() {
+    public void incrementEmojiSentCount(String emojiClicked) {
         mDatabase.child("users").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ChatUser currUser = snapshot.getValue(ChatUser.class);
                 if (currUser != null) {
                     // update the user so they have an increased sticker sent count
-                    mDatabase.child("users").child(username).setValue(currUser.incrementStickerSentCount());
+                    mDatabase.child("users").child(username).setValue(currUser.incrementStickerSentCount(emojiClicked));
                 } else {
                     Log.e(TAG, "Unable to retrieve user" + snapshot.toString());
                 }
@@ -175,6 +177,4 @@ public class FirebaseRealtimeDatabaseInstance {
             }
         });
     }
-
-
 }

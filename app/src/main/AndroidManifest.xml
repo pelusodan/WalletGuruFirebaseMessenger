@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity"></activity>
+        <activity android:name=".view.MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"
